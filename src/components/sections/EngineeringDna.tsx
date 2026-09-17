@@ -125,11 +125,12 @@ export function EngineeringDna() {
         index="02"
         label="Engineering DNA"
         title={["How I", "build"]}
+        accent="build"
         note={`${dimensions.length} stages, ${technologyCount} tools — run one and see what's underneath it.`}
       />
 
       <div className="relative mt-16 lg:mt-20">
-        <div ref={terminalRef} className="terminal-card">
+        <div ref={terminalRef} className="terminal-card lg:max-w-3xl">
           <div className="terminal-head">
             <span className="label text-muted">
               <span aria-hidden className="terminal-status" />

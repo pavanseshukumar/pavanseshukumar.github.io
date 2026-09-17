@@ -22,6 +22,8 @@ type TextRevealProps = {
    * the wrong string — an email address broken across lines, for instance.
    */
   label?: string;
+  /** A word (matched exactly, punctuation included) set in accent rather than ink. */
+  accent?: string;
 };
 
 const unit: Variants = {
@@ -50,6 +52,7 @@ export function TextReveal({
   once = true,
   immediate = false,
   label,
+  accent,
 }: TextRevealProps) {
   const reducedMotion = usePrefersReducedMotion();
   const lines = typeof text === "string" ? [text] : text;
@@ -62,7 +65,15 @@ export function TextReveal({
       <Static className={className} aria-label={accessibleName}>
         {lines.map((line, lineIndex) => (
           <span key={lineIndex} aria-hidden className={cn("block", lineClassName)}>
-            {line}
+            {line.split(" ").map((word, wordIndex) => (
+              <span
+                key={wordIndex}
+                className={word === accent ? "text-accent" : undefined}
+              >
+                {wordIndex > 0 ? " " : ""}
+                {word}
+              </span>
+            ))}
           </span>
         ))}
       </Static>
@@ -91,7 +102,13 @@ export function TextReveal({
           className={cn("block", lineClassName)}
         >
           {line.split(" ").map((word, wordIndex) => (
-            <span key={wordIndex} className="inline-block whitespace-nowrap">
+            <span
+              key={wordIndex}
+              className={cn(
+                "inline-block whitespace-nowrap",
+                word === accent && "text-accent",
+              )}
+            >
               {by === "char" ? (
                 splitGraphemes(word).map((character, charIndex) => (
                   <Mask key={charIndex}>{character}</Mask>

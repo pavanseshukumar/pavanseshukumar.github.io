@@ -13,6 +13,8 @@ type SectionHeadingProps = {
   note?: ReactNode;
   className?: string;
   titleClassName?: string;
+  /** A word in `title` (matched exactly) set in accent rather than ink. */
+  accent?: string;
   /** Rendering level — the page has exactly one h1, in the hero. */
   as?: "h2" | "h3";
 };
@@ -28,6 +30,7 @@ export function SectionHeading({
   note,
   className,
   titleClassName,
+  accent,
   as: Heading = "h2",
 }: SectionHeadingProps) {
   const reducedMotion = usePrefersReducedMotion();
@@ -60,6 +63,7 @@ export function SectionHeading({
         text={title}
         by="word"
         stagger={0.045}
+        accent={accent}
         className={cn(
           "mt-6 font-display text-headline font-extrabold text-ink",
           titleClassName,
