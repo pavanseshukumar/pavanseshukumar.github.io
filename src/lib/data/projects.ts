@@ -22,7 +22,7 @@ export type ProjectVisual =
   | "mobile"
   | "marketplace"
   | "care"
-  | "stream";
+  | "booking";
 
 /** A measured outcome. `value` is display text — never re-derived or rounded. */
 export type ImpactStat = {
@@ -100,6 +100,19 @@ const assessCapabilities = [
   "Agent simulation from Beginner to Expert",
   "Learner performance dashboards",
   "Custom data visualizations",
+] as const;
+
+/**
+ * JS Fitness Coach's capability surface, as supplied. Declared before the
+ * project list so the headline figure can be counted from it rather than
+ * typed twice.
+ */
+const fitnessCapabilities = [
+  "Trainer profile",
+  "Service listing",
+  "Time-slot availability",
+  "Time-slot booking",
+  "Automated email confirmations",
 ] as const;
 
 export const projects: readonly Project[] = [
@@ -318,34 +331,38 @@ export const projects: readonly Project[] = [
   },
   {
     id: "06",
-    slug: "accelecom",
-    title: "Accelecom Services",
-    subtitle: "Enterprise app synchronization platform",
-    kicker: "Systems / backend",
+    slug: "js-fitness-coach",
+    title: "JS Fitness Coach",
+    subtitle: "Personal trainer booking platform",
+    kicker: "Booking / scheduling",
     description:
-      "High-throughput synchronization services between enterprise applications, and the REST surface external client systems integrate against.",
-    technologies: ["Node.js", "REST APIs"],
-    role: "Backend engineer",
+      "A booking platform for a personal fitness coach — trainer profile and services, time-slot scheduling, and automated email confirmations.",
+    technologies: ["Next.js", "React", "Tailwind CSS", "EmailJS"],
+    role: "Full-stack (solo)",
     impact: [
-      { value: "50K+", label: "Daily sync events" },
-      { value: "<1 sec", label: "Sync time, from ~3 sec" },
+      {
+        value: String(fitnessCapabilities.length).padStart(2, "0"),
+        label: "Capabilities",
+      },
     ],
+    capabilities: fitnessCapabilities,
     highlights: [
-      "Engineered high-throughput synchronization services between enterprise applications.",
-      "Processed 50,000+ daily synchronization events.",
-      "Optimized backend processing pipelines.",
-      "Reduced synchronization time from approximately 3 seconds to under 1 second.",
-      "Designed robust RESTful APIs.",
-      "Enabled integrations with external client systems.",
-      "Improved system reliability.",
-      "Reduced onboarding time for new integrations.",
+      "Built a Next.js application for a personal fitness coach's public booking site.",
+      "Designed a trainer profile and service listing.",
+      "Implemented time-slot based availability for the trainer's schedule.",
+      "Built a booking flow for visitors to reserve an available time slot.",
+      "Integrated EmailJS to send automated booking confirmation emails.",
+      "Styled the interface with Tailwind CSS.",
+      "Deployed the application to Netlify.",
     ],
-    visualType: "stream",
+    visualType: "booking",
     featured: false,
-    links: [],
+    links: [
+      { label: "Visit site", href: "https://jsfitnesscoach.netlify.app/" },
+    ],
     caseStudy: {
       overview:
-        "Synchronization services between enterprise applications, moving 50,000+ events a day in under a second each.",
+        "A booking platform for a personal fitness coach: trainer profile, service details, and time-slot scheduling with automated email confirmations.",
     },
   },
 ];
@@ -392,6 +409,6 @@ export const work = {
   title: ["Things", "I've", "built."],
   /** The one word that resolves to accent. */
   titleAccent: "built.",
-  note: "An assessment platform, two web products, two mobile apps and a synchronization layer.",
+  note: "An assessment platform, three web products and two mobile apps.",
   outro: { kicker: "Next", index: "06", title: "Impact" },
 } as const;

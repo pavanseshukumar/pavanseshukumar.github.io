@@ -352,135 +352,166 @@
 }
 
 /* ------------------------------------------------------------------ *
- * Engineering DNA
+ * Engineering DNA — a terminal, not a diagram
  * ------------------------------------------------------------------ */
 
 /*
- * Connection lines. Each spoke is a faint base stroke plus a short travelling
- * dash, so the system idles rather than sitting still. `pathLength="100"`
- * normalises the dash units, letting one rule drive spokes of any length.
+ * The whole system lives inside one window: a `select`-style menu of
+ * commands you can actually run, and the output — the stage's own tools —
+ * printed back into the same box, the way a real shell session works.
  */
-.dna-line {
-  fill: none;
-  stroke: var(--color-line);
-  stroke-width: 0.3;
+.terminal-card {
+  border: 1px solid var(--color-line);
+  background-color: color-mix(in srgb, var(--color-ink) 3%, transparent);
 }
 
-.dna-pulse {
-  fill: none;
-  stroke: rgba(245, 245, 240, 0.3);
-  stroke-width: 0.3;
-  stroke-dasharray: 5 95;
-  animation: dna-travel 11s linear infinite;
-}
-
-/* The active spoke carries a faster, brighter signal. */
-[data-active="true"] .dna-pulse {
-  stroke: var(--color-accent);
-  stroke-width: 0.7;
-  animation-duration: 2.6s;
-}
-
-@keyframes dna-travel {
-  from {
-    stroke-dashoffset: 100;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* A ring that turns slowly enough to be felt rather than watched. */
-.dna-ring {
-  transform-origin: 50% 50%;
-  animation: dna-spin 120s linear infinite;
-}
-
-@keyframes dna-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Transform-only idle motion — animating letter-spacing would relayout. */
-.dna-centre {
-  animation: dna-breathe 9s ease-in-out infinite;
-  will-change: transform;
-}
-
-@keyframes dna-breathe {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.035);
-  }
-}
-
-/*
- * The composition switches between a vertical spine and a radial ring in CSS
- * alone, driven by --x/--y written per node. That keeps one tablist in the
- * DOM for both layouts — duplicating it would duplicate every tab id.
- */
-.dna-stage {
+.terminal-head {
   display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--color-line);
+  padding: 0.85rem 1.1rem;
 }
 
-.dna-nodes {
-  display: flex;
-  flex-direction: column;
-  border-left: 1px solid var(--color-line);
-}
-
-/* The tick that ties each node to the vertical spine. */
-.dna-node::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 1.25rem;
-  height: 1px;
-  background-color: var(--color-line);
-  transition: background-color 0.35s ease;
-}
-
-.dna-node[data-active="true"]::before {
+/* The idle-pulse motif shared with the mobile products' live indicator —
+   the page's "this is live" cues read as one language. */
+.terminal-status {
+  position: relative;
+  display: inline-block;
+  height: 0.5rem;
+  width: 0.5rem;
+  margin-right: 0.6rem;
+  border-radius: 999px;
   background-color: var(--color-accent);
 }
 
-@media (width >= 64rem) {
-  .dna-stage {
-    display: block;
-  }
+.terminal-status::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  animation: terminal-pulse 2.2s ease-out infinite;
+}
 
-  .dna-centre-wrap {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+@keyframes terminal-pulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--color-accent-dim);
+    opacity: 1;
   }
+  70% {
+    box-shadow: 0 0 0 0.5rem transparent;
+    opacity: 0.4;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+    opacity: 1;
+  }
+}
 
-  .dna-nodes {
-    position: absolute;
-    inset: 0;
-    display: block;
-    border-left: 0;
-  }
+.terminal-body {
+  padding: 1.25rem 1.1rem 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+}
 
-  .dna-node {
-    position: absolute;
-    left: calc(var(--x) * 1%);
-    top: calc(var(--y) * 1%);
-    transform: translate(-50%, -50%);
-  }
+.terminal-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  color: var(--color-ink-60);
+}
 
-  .dna-node::before {
-    display: none;
+.terminal-comment {
+  margin-top: 0.6rem;
+  color: var(--color-muted);
+}
+
+.terminal-comment::before {
+  content: "# ";
+}
+
+/* The `select`-style menu: numbered rows a real shell would print, each one
+   a live control rather than a static list. */
+.terminal-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.1rem 1.5rem;
+  margin-block: 0.9rem;
+}
+
+@media (width >= 30rem) {
+  .terminal-options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
+
+.terminal-option {
+  display: flex;
+  cursor: pointer;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding-block: 0.4rem;
+  text-align: left;
+  color: var(--color-muted);
+  transition: color 0.25s ease;
+}
+
+.terminal-option:hover {
+  color: var(--color-ink);
+}
+
+.terminal-option[data-active="true"] {
+  color: var(--color-accent);
+}
+
+.terminal-prompt {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  border-block: 1px solid var(--color-line-soft);
+  padding-block: 0.65rem;
+  margin-bottom: 1rem;
+  color: var(--color-ink);
+}
+
+.terminal-output-label {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--color-accent);
+}
+
+.terminal-log {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.15rem 1.5rem;
+  margin-top: 0.9rem;
+}
+
+.terminal-log-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding-block: 0.4rem;
+  color: var(--color-ink-60);
+  border-top: 1px solid var(--color-line-soft);
+}
+
+@media (width < 30rem) {
+  .terminal-log {
+    grid-template-columns: 1fr;
+  }
+}
+
+.terminal-caret {
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  vertical-align: -0.15em;
+  background-color: var(--color-accent);
+  animation: caret-blink 1.5s steps(1, end) infinite;
 }
 
 /*
@@ -929,36 +960,6 @@
   }
 }
 
-/* ---- 06 Accelecom ---- */
-
-.stream-node {
-  fill: none;
-  stroke: var(--color-line);
-  stroke-width: 0.4;
-}
-
-.stream-packet {
-  stroke: var(--color-accent);
-  stroke-width: 0.9;
-  stroke-dasharray: 6 94;
-  animation: stream-packet 2.1s linear infinite;
-}
-
-@keyframes stream-packet {
-  from {
-    stroke-dashoffset: 100;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-.stream-label {
-  fill: var(--color-muted);
-  font-family: var(--font-mono);
-  letter-spacing: 0.14em;
-}
-
 /* ------------------------------------------------------------------ *
  * Reduced motion — collapse every decorative animation, keep the content.
  * ------------------------------------------------------------------ */
@@ -1010,9 +1011,8 @@
     transform: none !important;
   }
 
-  .dna-pulse,
-  .dna-ring,
-  .dna-centre,
+  .terminal-status::after,
+  .terminal-caret,
   .assess-caret,
   .assess-rung,
   .assess-bar,
@@ -1020,8 +1020,7 @@
   .mobile-sweep,
   .care-pulse,
   .market-tile,
-  .market-step,
-  .stream-packet {
+  .market-step {
     animation: none;
   }
 

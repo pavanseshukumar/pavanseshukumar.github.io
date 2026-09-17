@@ -1,6 +1,6 @@
 /*
  * The IMPACT interlude — one figure at a time, in narrative order:
- * experience → scale → users → systems → quality → reliability → future.
+ * experience → scale → users → quality → reliability → future.
  *
  * PROVENANCE — every figure here is already stated in projects.ts or derived
  * from the career dates. Nothing is added, rounded or invented for the sake
@@ -45,12 +45,6 @@ export const impact = {
       suffix: "+",
       label: ["Active users"],
       source: from("amc-ladder"),
-    },
-    {
-      figure: "50,000",
-      suffix: "+",
-      label: ["Daily sync events"],
-      source: from("accelecom"),
     },
     {
       figure: "35",

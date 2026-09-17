@@ -295,52 +295,57 @@ function MarketplaceVisual() {
 }
 
 /* ------------------------------------------------------------------ *
- * 06 — Accelecom: two systems, kept in step
+ * 06 — JS Fitness Coach: a schedule, one slot taken
  * ------------------------------------------------------------------ */
 
-function StreamVisual() {
-  const lanes = [18, 32, 46, 60, 74];
+function BookingVisual() {
+  const days = ["Mon", "Tue", "Wed", "Thu", "Fri"] as const;
+  const times = ["9:00", "11:00", "14:00", "16:00"] as const;
+  const bookedDay = 2;
+  const bookedTime = 1;
+
   return (
-    <Plate label="Synchronization" className="h-full w-full">
-      <svg viewBox="0 0 100 100" className="h-full w-full" aria-hidden>
-        {/* The two systems. */}
-        <rect x={4} y={12} width={14} height={76} className="stream-node" />
-        <rect x={82} y={12} width={14} height={76} className="stream-node" />
+    <div
+      className={cn(FRAME, "grid h-full w-full grid-rows-[auto_1fr_auto]")}
+    >
+      <p className="label border-b border-line px-4 py-3 text-muted">
+        <span className="text-accent">◍</span> Trainer availability
+      </p>
 
-        {lanes.map((y, index) => (
-          <g key={y}>
-            <line
-              x1={18}
-              x2={82}
-              y1={y}
-              y2={y}
-              stroke="currentColor"
-              className="text-line"
-              strokeWidth={0.3}
-            />
-            <line
-              x1={18}
-              x2={82}
-              y1={y}
-              y2={y}
-              className="stream-packet"
-              pathLength={100}
-              style={{ animationDelay: `${index * -0.7}s` }}
-            />
-          </g>
+      <div className="grid grid-cols-5 gap-1.5 p-4 text-center">
+        {days.map((day, dayIndex) => (
+          <div key={day} className="flex flex-col gap-1.5">
+            <p className="label text-muted">{day}</p>
+            {times.map((time, timeIndex) => {
+              const isBooked = dayIndex === bookedDay && timeIndex === bookedTime;
+              return (
+                <span
+                  key={time}
+                  className={cn(
+                    "label border py-1.5",
+                    isBooked
+                      ? "border-accent text-accent"
+                      : "border-line text-ink/40",
+                  )}
+                >
+                  {time}
+                </span>
+              );
+            })}
+          </div>
         ))}
+      </div>
 
-        <text
-          x={50}
-          y={95}
-          textAnchor="middle"
-          className="stream-label"
-          fontSize={4}
-        >
-          3s → &lt;1s
-        </text>
-      </svg>
-    </Plate>
+      <div className="flex items-center justify-between border-t border-line px-4 py-3">
+        <p className="label text-ink/70">
+          Booking confirmed <span className="text-muted">— email sent</span>
+        </p>
+        <span
+          aria-hidden
+          className="care-pulse h-2 w-2 rounded-full bg-accent"
+        />
+      </div>
+    </div>
   );
 }
 
@@ -380,8 +385,8 @@ export function ProjectVisual({
         );
       case "marketplace":
         return <MarketplaceVisual />;
-      case "stream":
-        return <StreamVisual />;
+      case "booking":
+        return <BookingVisual />;
     }
   })();
 
