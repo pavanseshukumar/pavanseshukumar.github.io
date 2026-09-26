@@ -16,6 +16,7 @@ import {
   useIsCoarsePointer,
   usePrefersReducedMotion,
 } from "@/lib/hooks/useMediaQuery";
+import { LanyardBadge } from "@/components/visuals/LanyardBadge";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -273,6 +274,9 @@ export function Hero() {
             </span>
           </div>
         </motion.div>
+
+        {/* ---------- Hanging ID badge (desktop, pointer-driven) ---------- */}
+        <LanyardBadge />
 
         {/* ---------- Composition ---------- */}
         <div className="gutter relative flex min-h-svh flex-1 flex-col justify-between pb-6 pt-20 md:pb-8 md:pt-28">

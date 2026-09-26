@@ -15,6 +15,7 @@ import { ScrollProgress } from "@/components/chrome/ScrollProgress";
 import { SectionRail } from "@/components/chrome/SectionRail";
 import { Footer } from "@/components/chrome/Footer";
 import "./globals.css";
+import { cn } from "@/lib/utils";
 
 const display = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -130,7 +131,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${sans.variable} ${mono.variable}`}
+      className={cn(display.variable, sans.variable, mono.variable, "font-sans")}
       suppressHydrationWarning
     >
       <body className="grain bg-void text-ink antialiased">
