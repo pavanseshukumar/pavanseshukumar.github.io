@@ -1241,3 +1241,60 @@
   --sidebar-border: rgba(245, 245, 240, 0.11);
   --sidebar-ring: #b7ff3c;
 }
+
+/* ------------------------------------------------------------------ *
+ * Index panel — the flowing hover band
+ *
+ * The row's own label, repeated and scrolling, laid over the row while the
+ * pointer is on it. Two identical runs inside one track: the track travels
+ * exactly one run's width and restarts, so the loop has no seam.
+ * ------------------------------------------------------------------ */
+.flow-band {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  pointer-events: none;
+  background-color: var(--color-accent);
+  color: var(--color-void);
+  transform: translate3d(0, 101%, 0);
+  will-change: transform;
+}
+
+.flow-band-track {
+  display: flex;
+  /* Sized by its content, not the row: the two runs must be exactly equal for
+     a -50% travel to land back where it started. */
+  width: max-content;
+  animation: marquee-track 22s linear infinite;
+}
+
+.flow-band-run {
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+
+.flow-band-item {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  padding-right: 2.5rem;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  font-weight: 800;
+  line-height: var(--text-display--line-height);
+  letter-spacing: var(--text-display--letter-spacing);
+}
+
+/* The page's square motif, inverted onto the accent. */
+.flow-band-mark {
+  display: block;
+  height: 0.5rem;
+  width: 0.5rem;
+  flex: none;
+  background-color: var(--color-void);
+}

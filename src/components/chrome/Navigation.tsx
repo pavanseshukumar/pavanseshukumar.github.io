@@ -9,6 +9,7 @@ import { scrollToTarget } from "@/lib/scroll";
 import { lockPageScroll, unlockPageScroll } from "@/lib/scrollLock";
 import { useActiveSection } from "@/lib/hooks/useActiveSection";
 import { MagneticButton } from "@/components/motion/MagneticButton";
+import { FlowingRow } from "@/components/motion/FlowingRow";
 import { usePrefersReducedMotion } from "@/lib/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 
@@ -91,10 +92,7 @@ export function Navigation() {
     };
   }, [open, close]);
 
-  const goTo = (
-    event: React.MouseEvent<HTMLAnchorElement>,
-    id: string,
-  ) => {
+  const goTo = (event: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     // Let Cmd/Ctrl/middle clicks open the anchor normally.
     if (
       event.metaKey ||
@@ -218,48 +216,50 @@ export function Navigation() {
 
                       return (
                         <li key={section.id} className="hairline">
-                          <motion.a
-                            href={`#${section.id}`}
-                            onClick={(event) => goTo(event, section.id)}
-                            aria-current={isActive ? "true" : undefined}
-                            data-cursor="view"
-                            data-cursor-label="Go"
-                            className="group flex w-full cursor-pointer items-baseline gap-5 py-3 text-left focus-visible:outline-offset-8 md:gap-10 md:py-5"
-                            {...(reducedMotion
-                              ? {}
-                              : {
-                                  initial: { opacity: 0, y: 32 },
-                                  animate: { opacity: 1, y: 0 },
-                                  transition: {
-                                    duration: 0.7,
-                                    delay: 0.18 + index * 0.06,
-                                    ease: [0.16, 1, 0.3, 1] as const,
-                                  },
-                                })}
-                          >
-                            <span
-                              className={cn(
-                                "label w-8 shrink-0 transition-colors duration-300 group-hover:text-accent",
-                                isActive ? "text-accent" : "text-muted",
-                              )}
+                          <FlowingRow label={section.label}>
+                            <motion.a
+                              href={`#${section.id}`}
+                              onClick={(event) => goTo(event, section.id)}
+                              aria-current={isActive ? "true" : undefined}
+                              data-cursor="view"
+                              data-cursor-label="Go"
+                              className="group flex w-full cursor-pointer items-baseline gap-5 py-3 text-left focus-visible:outline-offset-8 md:gap-10 md:py-5"
+                              {...(reducedMotion
+                                ? {}
+                                : {
+                                    initial: { opacity: 0, y: 32 },
+                                    animate: { opacity: 1, y: 0 },
+                                    transition: {
+                                      duration: 0.7,
+                                      delay: 0.18 + index * 0.06,
+                                      ease: [0.16, 1, 0.3, 1] as const,
+                                    },
+                                  })}
                             >
-                              {section.index}
-                            </span>
-
-                            <span className="font-display text-display font-extrabold text-ink transition-[color,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-3 group-hover:text-accent">
-                              {section.label}
-                            </span>
-
-                            {isActive ? (
-                              <span className="label ml-auto flex shrink-0 items-center gap-2 self-center text-accent">
-                                <span
-                                  aria-hidden
-                                  className="h-1.5 w-1.5 rounded-full bg-accent"
-                                />
-                                <span className="hidden sm:inline">Here</span>
+                              <span
+                                className={cn(
+                                  "label w-8 shrink-0 transition-colors duration-300 group-hover:text-accent",
+                                  isActive ? "text-accent" : "text-muted",
+                                )}
+                              >
+                                {section.index}
                               </span>
-                            ) : null}
-                          </motion.a>
+
+                              <span className="font-display text-display font-extrabold text-ink transition-[color,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-3 group-hover:text-accent">
+                                {section.label}
+                              </span>
+
+                              {isActive ? (
+                                <span className="label ml-auto flex shrink-0 items-center gap-2 self-center text-accent">
+                                  <span
+                                    aria-hidden
+                                    className="h-1.5 w-1.5 rounded-full bg-accent"
+                                  />
+                                  <span className="hidden sm:inline">Here</span>
+                                </span>
+                              ) : null}
+                            </motion.a>
+                          </FlowingRow>
                         </li>
                       );
                     })}
@@ -300,7 +300,10 @@ export function Navigation() {
                             className="label cursor-pointer items-center text-muted transition-colors hover:text-accent"
                           >
                             {social.label}
-                            <ArrowUpRight className="h-3 w-3" strokeWidth={1.5} />
+                            <ArrowUpRight
+                              className="h-3 w-3"
+                              strokeWidth={1.5}
+                            />
                           </MagneticButton>
                         </li>
                       ))}
