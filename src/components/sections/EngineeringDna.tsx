@@ -130,7 +130,7 @@ export function EngineeringDna() {
       />
 
       <div className="relative mt-16 lg:mt-20">
-        <div ref={terminalRef} className="terminal-card lg:max-w-3xl">
+        <div ref={terminalRef} className="terminal-card w-full">
           <div className="terminal-head">
             <span className="label text-muted">
               <span aria-hidden className="terminal-status" />
